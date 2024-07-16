@@ -2,3 +2,4 @@ __pycache__
 .env
 venv
 prototype/documents/
+prototype/transcription.txt

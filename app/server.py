@@ -14,8 +14,8 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 index_name = "pdf-index"
 
 app = FastAPI()
@@ -25,12 +25,13 @@ app = FastAPI()
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
-embeddings=OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+embeddings=OpenAIEmbeddings(api_key=config("OPENAI_API_KEY"))
 vectorstore = PineconeVectorStore(
     index_name=index_name, 
-    embedding=embeddings
+    embedding=embeddings,
+    pinecone_api_key=config("PINECONE_API_KEY")
 )
-model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo")
+model = ChatOpenAI(openai_api_key=config("OPENAI_API_KEY"), model="gpt-3.5-turbo")
 template = """
 Answer the question based on the context below. If you can't 
 answer the question, reply "I don't know".
